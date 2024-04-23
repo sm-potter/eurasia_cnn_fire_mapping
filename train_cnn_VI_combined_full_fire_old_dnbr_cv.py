@@ -11,26 +11,6 @@ import logging, os
 logging.disable(logging.WARNING)
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 os.environ["SM_FRAMEWORK"] = "tf.keras"
-#os.environ['LD_LIBRARY_PATH'] = '/home/spotter5/.conda/envs/deeplearning3/lib:' + os.environ.get('LD_LIBRARY_PATH', '')
-# os.environ['CUDA_HOME'] = '/home/spotter5/.conda/envs/deeplearning/lib'
-#os.environ['NVVMIR_LIBRARY_DIR'] = '/home/spotter5/.conda/envs/deeplearning3/lib'
-# os.environ['NVVMIR_LIBRARY_DIR'] = '--xla_gpu_cuda_data_dir=/home/spotter5/.conda/envs/deeplearning/lib/python3.8/site-packages/jaxlib/cuda/nvvmb'
-
-# os.environ["XLA_FLAGS"]="-–xla_gpu_cuda_data_dir=/home/spotter5/.conda/envs/deeplearning/lib"
-# os.environ["XLA_FLAGS"] = "--xla_gpu_cuda_data_dir=/home/spotter5/.conda/envs/deeplearning/lib"
-# os.environ['XLA_FLAGS'] = "--xla_gpu_cuda_data_dir=/home/spotter5/.conda/envs/deeplearning/nvvm/libdevice"
-# os.environ["TF_XLA_FLAGS"]="-–xla_gpu_cuda_data_dir=/home/spotter5/.conda/envs/deeplearning/lib"
-
-# os.environ['XLA_FLAGS']='--xla_gpu_cuda_data_dir=/home/spotter5/.conda/envs/deeplearning/lib/python3.8/site-packages/jaxlib/cuda/nvvm'
-
-print("XLA_FLAGS:", os.getenv("XLA_FLAGS"))
-
-# if 'CONDA_PREFIX' in os.environ:
-#     os.environ['XLA_FLAGS'] = f'--xla_gpu_cuda_data_dir={os.environ["CONDA_PREFIX"]}/lib'
-# else:
-#     print("CONDA_PREFIX not set. Are you running this script within an active Conda environment?")
-
-
 import tensorflow
 from tensorflow.keras.preprocessing.image import load_img
 from tensorflow.python.lib.io import file_io
@@ -53,9 +33,10 @@ import geopandas as gpd
 import logging
 import time
 
-fold = 3
-# Record the start tim
+# Record the start time
 start_time = time.time()
+
+fold = 4
 
 # gpu_devices = tensorflow.config.experimental.list_physical_devices('GPU')
 # for device in gpu_devices:
@@ -123,9 +104,11 @@ validation_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/R
 testing_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/train_fold_{fold}.csv')['ID'].tolist()
 
 
-#now I need to get the chunked files which match the fire ids to make new training, validation and testing times
-#path to the chunked files
-chunked =  os.listdir('/explore/nobackup/people/spotter5/cnn_mapping/Russia/anna_training_85_subs_0_128')
+chunked =  os.listdir('/explore/nobackup/people/spotter5/cnn_mapping/Russia/anna_training_85_old_subs_0_128')
+
+chunked[:10]
+
+chunked[0].split('_')[-1].split('.')[0]
 
 def filter_chunked(in_names, chunked):
     """
@@ -145,12 +128,52 @@ def filter_chunked(in_names, chunked):
         if int(name.split('_')[-1].split('.')[0]) in in_names
     ]
     
-    filtered_chunked = ['/explore/nobackup/people/spotter5/cnn_mapping/Russia/anna_training_85_subs_0_128/' + i for i in filtered_chunked]
+    filtered_chunked = ['/explore/nobackup/people/spotter5/cnn_mapping/Russia/anna_training_85_old_subs_0_128/' + i for i in filtered_chunked]
     return filtered_chunked
 
 training_names = filter_chunked(training_names, chunked)
 validation_names = filter_chunked(validation_names, chunked)
 testing_names = filter_chunked(testing_names, chunked)
+
+training_names2 = pd.read_csv('/explore/nobackup/people/spotter5/cnn_mapping/Russia/mtbs_training_files.csv')['Files'].tolist()
+validation_names2 = pd.read_csv('/explore/nobackup/people/spotter5/cnn_mapping/Russia/mtbs_validation_files.csv')['Files'].tolist()
+testing_names2 = pd.read_csv('/explore/nobackup/people/spotter5/cnn_mapping/Russia/mtbs_testing_files.csv')['Files'].tolist()
+
+
+training_names3 = pd.read_csv('/explore/nobackup/people/spotter5/cnn_mapping/Russia/nbac_training_files.csv')['Files'].tolist()
+validation_names3 = pd.read_csv('/explore/nobackup/people/spotter5/cnn_mapping/Russia/nbac_validation_files.csv')['Files'].tolist()
+testing_names3 = pd.read_csv('/explore/nobackup/people/spotter5/cnn_mapping/Russia/nbac_testing_files.csv')['Files'].tolist()
+
+
+
+# good_ids= pd.read_csv('/explore/nobackup/people/spotter5/cnn_mapping/raw_files/ak_ca_1985_clip.csv')
+
+
+# def get_good(in_list, good_frame):
+    
+#     final = []
+#     for i in in_list:
+
+#         try:
+
+#             in_id = int(i.split('/')[-1].split('_')[2].replace('.npy', ''))
+
+#             if in_id in good_frame['ID']:
+
+#                 final.append(i)
+#         except:
+#             pass
+        
+#     return final
+
+# training_names = get_good(training_names, good_ids)
+# validation_names = get_good(validation_names, good_ids)
+# testing_names = get_good(testing_names, good_ids)
+
+
+training_names = training_names + training_names2 + training_names3 
+validation_names = validation_names + validation_names2 + validation_names3
+testing_names = testing_names + testing_names2 + testing_names3
 
 
 from sklearn.preprocessing import MinMaxScaler
@@ -197,8 +220,16 @@ class img_gen(tensorflow.keras.utils.Sequence):
         for j, path in enumerate(batch_img_paths):
 
             #load image
-            img =  np.round(np.load(path), 3)[:, :, :-1]
+            img =  np.round(np.load(path), 3)
+            
+            if img.shape[2] == 4:
+                img = img[:, :, :-1]
 
+                
+            else:
+                
+                img = img[:, :, 6:9]
+                
             # img = img * 1000
             img = img.astype(float)
             img = np.round(img, 3)
@@ -324,10 +355,10 @@ test_gen = img_gen(batch_size, img_size, testing_names)
 #
 
 # Free up RAM in case the model definition cells were run multiple times
-# tensorflow.keras.backend.clear_session()
-
+tensorflow.keras.backend.clear_session()
 LR = 1e-3
-optimizer = tensorflow.keras.optimizers.Adam(learning_rate = LR) #this is 1e-3, default or 'rmsprop'
+
+optimizer = tensorflow.keras.optimizers.Adam(learning_rate = 1e-3) #this is 1e-3, default or 'rmsprop'
 
     
 loss= tensorflow.keras.losses.BinaryFocalCrossentropy(
@@ -349,16 +380,14 @@ loss= tensorflow.keras.losses.BinaryFocalCrossentropy(
 
 
 callbacks = [tensorflow.keras.callbacks.ModelCheckpoint(
-    filepath=f"/explore/nobackup/people/spotter5/cnn_mapping/Russia/models/russia_good_no_regularize_{fold}",
+    filepath=f"/explore/nobackup/people/spotter5/cnn_mapping/Russia/models/combined_good_old_dnbr_{fold}",
 #     verbose=1,
     save_weights_only=False,
     save_best_only=True,
-        monitor='val_unet_output_final_activation_iou_score',
+       monitor='val_unet_output_final_activation_iou_score',
     mode = 'max'),
     tensorflow.keras.callbacks.EarlyStopping(monitor='val_unet_output_final_activation_iou_score', mode = 'max',  patience=20),
     tensorflow.keras.callbacks.ReduceLROnPlateau(monitor='val_unet_output_final_activation_loss', factor=0.5, patience=5, min_lr=1e-6, verbose=1)]
-    
-# tensorflow.keras.callbacks.ReduceLROnPlateau(monitor = 'loss', mode = 'min', patience = 10, min_delta=0.001, min_LR = LR/25, verbose = 1)
 
 # Open a strategy scope.
 with strategy.scope():
@@ -407,7 +436,7 @@ history = model_unet_from_scratch.fit(
     verbose = 0) 
 
 # model_unet_from_scratch.save("/explore/nobackup/people/spotter5/cnn_mapping/nbac_training/l8_sent_collection2_079_128.h5")
-model_unet_from_scratch.save(f"/explore/nobackup/people/spotter5/cnn_mapping/Russia/models/russia_good_no_regularize_{fold}.tf")
+model_unet_from_scratch.save(f"/explore/nobackup/people/spotter5/cnn_mapping/Russia/models/combined_good_old_dnbr_{fold}.tf")
 
 
 history_dict = history.history
@@ -438,7 +467,7 @@ result = pd.DataFrame({'Precision': history_dict["unet_output_final_activation_p
                        'Val_Accuracy': history_dict['val_unet_output_final_activation_accuracy']})
 
 
-result.to_csv(f"/explore/nobackup/people/spotter5/cnn_mapping/Russia/russia_good_no_regularize_{fold}.csv")
+result.to_csv(f"/explore/nobackup/people/spotter5/cnn_mapping/Russia/combined_good_old_dnbr_{fold}.csv")
 
 
 

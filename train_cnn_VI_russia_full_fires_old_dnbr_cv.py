@@ -11,7 +11,7 @@ import logging, os
 logging.disable(logging.WARNING)
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 os.environ["SM_FRAMEWORK"] = "tf.keras"
-# os.environ["XLA_FLAGS"]="-–xla_gpu_cuda_data_dir=/home/spotter5/.conda/envs/deeplearning/lib"
+#os.environ["XLA_FLAGS"]="-–xla_gpu_cuda_data_dir=/home/spotter5/.conda/envs/deeplearning/lib"
 import tensorflow
 from tensorflow.keras.preprocessing.image import load_img
 from tensorflow.python.lib.io import file_io
@@ -32,9 +32,8 @@ import geopandas as gpd
 # import tensorflow_addons as tfa
 import time
 
-#traIning fold
-fold = 0
-
+#traIning fo4
+fold = 3
 # Record the start time
 start_time = time.time()
 
