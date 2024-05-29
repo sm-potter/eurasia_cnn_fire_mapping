@@ -33,7 +33,7 @@ import geopandas as gpd
 import time
 
 #traIning fo4
-fold = 3
+fold = 2
 # Record the start time
 start_time = time.time()
 

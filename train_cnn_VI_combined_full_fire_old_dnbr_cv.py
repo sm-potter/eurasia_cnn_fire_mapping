@@ -34,9 +34,8 @@ import logging
 import time
 
 # Record the start time
-start_time = time.time()
-
-fold = 4
+start_time = time.time()1
+fold = 3
 
 # gpu_devices = tensorflow.config.experimental.list_physical_devices('GPU')
 # for device in gpu_devices:
