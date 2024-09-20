@@ -1,0 +1,15 @@
+slurmstepd: error: *** JOB 38287404 ON gpu005 CANCELLED AT 2024-06-12T16:20:25 ***
+python: can't open file '/home/spotter5/cnn_mapping/na_cnn_fire_mapping/train_cnn_VI_combined_unet1.py': [Errno 2] No such file or directory
+python: can't open file '/home/spotter5/cnn_mapping/eurasia_cnn_fire_mapping/train_cnn_VI_combined_unet1.py': [Errno 2] No such file or directory
+Traceback (most recent call last):
+  File "/home/spotter5/cnn_mapping/eurasia_cnn_fire_mapping/train_cnn_VI_combined_unet1.py", line 18, in <module>
+    import segmentation_models as sm
+  File "/home/spotter5/.conda/envs/deeplearning/lib/python3.8/site-packages/segmentation_models/__init__.py", line 98, in <module>
+    set_framework(_framework)
+  File "/home/spotter5/.conda/envs/deeplearning/lib/python3.8/site-packages/segmentation_models/__init__.py", line 68, in set_framework
+    import efficientnet.keras  # init custom objects
+  File "/home/spotter5/.conda/envs/deeplearning/lib/python3.8/site-packages/efficientnet/keras.py", line 17, in <module>
+    init_keras_custom_objects()
+  File "/home/spotter5/.conda/envs/deeplearning/lib/python3.8/site-packages/efficientnet/__init__.py", line 71, in init_keras_custom_objects
+    keras.utils.generic_utils.get_custom_objects().update(custom_objects)
+AttributeError: module 'keras.utils.generic_utils' has no attribute 'get_custom_objects'

@@ -29,14 +29,14 @@ from tensorflow.keras.layers import Conv2D, Input, AvgPool2D
 from tensorflow.keras.models import Model
 from keras_unet_collection import models
 import geopandas as gpd
-import tensorflow_addons as tfa
+# import tensorflow_addons as tfa
 import logging
 import time
 
 # Record the start time
 start_time = time.time()
 
-fold = 0
+fold = 3
 # gpu_devices = tensorflow.config.experimental.list_physical_devices('GPU')
 # for device in gpu_devices:
 #     tensorflow.config.experimental.set_memory_growth(device, True)
@@ -99,8 +99,8 @@ def get_files(bucket_path):
 
 #get all the pathways
 training_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/train_fold_{fold}.csv')['ID'].tolist()
-validation_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/train_fold_{fold}.csv')['ID'].tolist()
-testing_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/train_fold_{fold}.csv')['ID'].tolist()
+validation_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/val_fold_{fold}.csv')['ID'].tolist()
+testing_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/test_fold_{fold}.csv')['ID'].tolist()
 
 
 chunked =  os.listdir('/explore/nobackup/people/spotter5/cnn_mapping/Russia/anna_training_85_subs_0_128')
@@ -374,7 +374,7 @@ loss= tensorflow.keras.losses.BinaryFocalCrossentropy(
 
 
 callbacks = [tensorflow.keras.callbacks.ModelCheckpoint(
-    filepath=f"/explore/nobackup/people/spotter5/cnn_mapping/Russia/models/combined_good_{fold}",
+    filepath=f"/explore/nobackup/people/spotter5/cnn_mapping/Russia/models/combined_good_{fold}_t2",
 #     verbose=1,
     save_weights_only=False,
     save_best_only=True,
@@ -430,7 +430,7 @@ history = model_unet_from_scratch.fit(
     verbose = 0) 
 
 # model_unet_from_scratch.save("/explore/nobackup/people/spotter5/cnn_mapping/nbac_training/l8_sent_collection2_079_128.h5")
-model_unet_from_scratch.save(f"/explore/nobackup/people/spotter5/cnn_mapping/Russia/models/combined_good_{fold}.tf")
+model_unet_from_scratch.save(f"/explore/nobackup/people/spotter5/cnn_mapping/Russia/models/combined_good_{fold}_t2.tf")
 
 
 history_dict = history.history
@@ -461,7 +461,7 @@ result = pd.DataFrame({'Precision': history_dict["unet_output_final_activation_p
                        'Val_Accuracy': history_dict['val_unet_output_final_activation_accuracy']})
 
 
-result.to_csv(f"/explore/nobackup/people/spotter5/cnn_mapping/Russia/combined_good_{fold}.csv")
+result.to_csv(f"/explore/nobackup/people/spotter5/cnn_mapping/Russia/combined_good_{fold}_t2.csv")
 
 
 

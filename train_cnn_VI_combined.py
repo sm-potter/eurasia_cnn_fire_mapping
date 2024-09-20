@@ -10,6 +10,8 @@ import pandas as pd
 import logging, os
 logging.disable(logging.WARNING)
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+os.environ["SM_FRAMEWORK"] = "tf.keras"
+
 import tensorflow
 from tensorflow.keras.preprocessing.image import load_img
 from tensorflow.python.lib.io import file_io

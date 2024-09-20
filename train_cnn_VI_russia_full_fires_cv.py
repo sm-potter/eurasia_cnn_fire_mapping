@@ -117,10 +117,10 @@ def get_files(bucket_path):
 	return(all)
 
 
-#get all the pathways
+#get all the pathways, why are these all train fold??
 training_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/train_fold_{fold}.csv')['ID'].tolist()
-validation_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/train_fold_{fold}.csv')['ID'].tolist()
-testing_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/train_fold_{fold}.csv')['ID'].tolist()
+validation_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/val_fold_{fold}.csv')['ID'].tolist()
+testing_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/test_fold_{fold}.csv')['ID'].tolist()
 
 
 #now I need to get the chunked files which match the fire ids to make new training, validation and testing times
@@ -349,7 +349,7 @@ loss= tensorflow.keras.losses.BinaryFocalCrossentropy(
 
 
 callbacks = [tensorflow.keras.callbacks.ModelCheckpoint(
-    filepath=f"/explore/nobackup/people/spotter5/cnn_mapping/Russia/models/russia_good_no_regularize_{fold}",
+    filepath=f"/explore/nobackup/people/spotter5/cnn_mapping/Russia/models/russia_good_no_regularize_{fold}_t2",
 #     verbose=1,
     save_weights_only=False,
     save_best_only=True,
@@ -407,7 +407,7 @@ history = model_unet_from_scratch.fit(
     verbose = 0) 
 
 # model_unet_from_scratch.save("/explore/nobackup/people/spotter5/cnn_mapping/nbac_training/l8_sent_collection2_079_128.h5")
-model_unet_from_scratch.save(f"/explore/nobackup/people/spotter5/cnn_mapping/Russia/models/russia_good_no_regularize_{fold}.tf")
+model_unet_from_scratch.save(f"/explore/nobackup/people/spotter5/cnn_mapping/Russia/models/russia_good_no_regularize_{fold}_t2.tf")
 
 
 history_dict = history.history
@@ -438,7 +438,7 @@ result = pd.DataFrame({'Precision': history_dict["unet_output_final_activation_p
                        'Val_Accuracy': history_dict['val_unet_output_final_activation_accuracy']})
 
 
-result.to_csv(f"/explore/nobackup/people/spotter5/cnn_mapping/Russia/russia_good_no_regularize_{fold}.csv")
+result.to_csv(f"/explore/nobackup/people/spotter5/cnn_mapping/Russia/russia_good_no_regularize_{fold}_t2.csv")
 
 
 
