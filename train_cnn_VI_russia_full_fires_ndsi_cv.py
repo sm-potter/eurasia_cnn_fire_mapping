@@ -53,8 +53,8 @@ import geopandas as gpd
 import logging
 import time
 
-fold = 1
-# Record the start tim
+fold = 2
+# Record the st2rt tim
 start_time = time.time()
 
 # gpu_devices = tensorflow.config.experimental.list_physical_devices('GPU')
@@ -119,8 +119,8 @@ def get_files(bucket_path):
 
 #get all the pathways
 training_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/train_fold_{fold}.csv')['ID'].tolist()
-validation_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/test_fold_{fold}.csv')['ID'].tolist()
-testing_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/val_fold_{fold}.csv')['ID'].tolist()
+validation_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/val_fold_{fold}.csv')['ID'].tolist()
+testing_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/test_fold_{fold}.csv')['ID'].tolist()
 
 # training_names = pd.read_csv('/explore/nobackup/people/spotter5/cnn_mapping/Russia/anna_ndsi_composites_training_files.csv')['Files'].tolist()
 # validation_names = pd.read_csv('/explore/nobackup/people/spotter5/cnn_mapping/Russia/anna_ndsi_composites_validation_files.csv')['Files'].tolist()

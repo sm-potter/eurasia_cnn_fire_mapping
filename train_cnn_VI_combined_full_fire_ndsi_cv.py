@@ -35,7 +35,7 @@ import time
 
 # Record the start time
 start_time = time.time()
-fold = 1
+fold = 4
 # gpu_devices = tensorflow.config.experimental.list_physical_devices('GPU')
 # for device in gpu_devices:
 #     tensorflow.config.experimental.set_memory_growth(device, True)
@@ -98,8 +98,8 @@ def get_files(bucket_path):
 
 #get all the pathways
 training_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/train_fold_{fold}.csv')['ID'].tolist()
-validation_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/test_fold_{fold}.csv')['ID'].tolist()
-testing_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/val_fold_{fold}.csv')['ID'].tolist()
+validation_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/val_fold_{fold}.csv')['ID'].tolist()
+testing_names = pd.read_csv(f'/explore/nobackup/people/spotter5/cnn_mapping/Russia/test_fold_{fold}.csv')['ID'].tolist()
 
 # training_names = pd.read_csv('/explore/nobackup/people/spotter5/cnn_mapping/Russia/anna_ndsi_composites_training_files.csv')['Files'].tolist()
 # validation_names = pd.read_csv('/explore/nobackup/people/spotter5/cnn_mapping/Russia/anna_ndsi_composites_validation_files.csv')['Files'].tolist()

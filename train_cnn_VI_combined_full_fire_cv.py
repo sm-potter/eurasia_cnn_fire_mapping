@@ -36,8 +36,8 @@ import time
 # Record the start time
 start_time = time.time()
 
-fold = 3
-# gpu_devices = tensorflow.config.experimental.list_physical_devices('GPU')
+fold = 1
+# gpu_devices = tensor3low.config.experimental.list_physical_devices('GPU')
 # for device in gpu_devices:
 #     tensorflow.config.experimental.set_memory_growth(device, True)
 

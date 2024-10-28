@@ -53,7 +53,7 @@ import geopandas as gpd
 import logging
 import time
 
-fold = 4
+fold = 2
 # Record the start tim
 start_time = time.time()
 

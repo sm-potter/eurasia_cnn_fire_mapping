@@ -50,8 +50,15 @@ export XLA_FLAGS=--xla_gpu_cuda_data_dir=$CONDA_PREFIX
 
 # python /home/spotter5/cnn_mapping/eurasia_cnn_fire_mapping/train_cnn_VI_russia_full_fires_cv.py
 
+# python /home/spotter5/cnn_mapping/eurasia_cnn_fire_mapping/train_cnn_VI_combined_full_fire_cv_old.py
+# python /home/spotter5/cnn_mapping/eurasia_cnn_fire_mapping/train_cnn_VI_combined_full_fire_ndsi_cv.py
+# python /home/spotter5/cnn_mapping/eurasia_cnn_fire_mapping/train_cnn_VI_combined_full_fire_ndsi_sliding_cv.py
 # python /home/spotter5/cnn_mapping/eurasia_cnn_fire_mapping/train_cnn_VI_russia_full_fires_cv_old.py
-python /home/spotter5/cnn_mapping/eurasia_cnn_fire_mapping/train_cnn_VI_combined_full_fire_cv_old.py
+# python /home/spotter5/cnn_mapping/eurasia_cnn_fire_mapping/train_cnn_VI_russia_full_fires_ndsi_cv.py
+# python /home/spotter5/cnn_mapping/eurasia_cnn_fire_mapping/train_cnn_VI_russia_full_fires_ndsi_sliding_cv.py
+
+python /home/spotter5/cnn_mapping/eurasia_cnn_fire_mapping/train_cnn_VI_combined_full_fire_ndsi_sliding_cv_final.py
+
 
 # python /home/spotter5/cnn_mapping/eurasia_cnn_fire_mapping/train_cnn_VI_combined_unet1_ndsi.py
 
